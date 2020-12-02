@@ -1,30 +1,11 @@
-# author: agoloborodko@github.com
-
-from game_objects import VialBoard, Vial
+from  water_sort_puzzle.game_objects import *
 import copy
 import queue
 from water_sort_puzzle.exceptions import CannotSolveThisException
 
 
-class GenVialBoard(VialBoard):
-    gen = 0
-
-
 def clone_vial_board(board):
-    board_data = copy.deepcopy(board.data)
-    board_path = copy.deepcopy(board.path)
-    board_init_data = copy.deepcopy(board.init_data)
-
-    new_board = GenVialBoard(board_data)
-    new_board.path = board_path
-    new_board.init_data = board_init_data
-
-    if not isinstance(board, GenVialBoard):
-        new_board.gen = 1
-    else:
-        new_board.gen = board.gen + 1
-
-    return new_board
+    return board.clone()
 
 
 def solve_queue_wide(q):
@@ -173,3 +154,21 @@ def count_board_elements(vial_board):
             else:
                 d[el] = 1
     return d
+
+def solve_puzzle(bottle_state):
+    
+    pvb = PlotableVialBoard(bottle_state)  # Initialize
+    solved_pvb = solve(pvb)  # Solve puzzle
+    paths = solved_pvb.path  # Save Solution
+
+    # Print out Solution:
+    new_pvb = pvb.clone()
+
+    print('Origin Status:')
+    new_pvb.show()
+
+    for n, path in enumerate(paths):
+        print('Step %d: %d --> %d' % (n+1, path[0]+1, path[1]+1))
+        new_pvb.move(*path)
+        new_pvb.show()
+        print()

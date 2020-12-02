@@ -1,6 +1,7 @@
 import unittest
-import game_objects as obj
-import exceptions as ex
+from water_sort_puzzle.game_objects import *
+import water_sort_puzzle.game_objects as obj
+import water_sort_puzzle.exceptions as ex
 
 
 class TestPath(unittest.TestCase):
@@ -347,6 +348,31 @@ class TestVialBoard(unittest.TestCase):
         self.assertEqual([[1, 1], []], board)
         self.assertEqual([], board.path)
 
+class TestPlotableVialBoard(unittest.TestCase):
+
+    def setUp(self):
+        example = [
+            [YE,OR,GY,LG],
+            [LB,GR,PU,RE],
+            [PU,LG,PI,GR],
+            [BR,RE,PI,YE],
+            [PU,BR,BL,GR],
+            [YE,PU,GY,GR],
+            [DG,BL,GY,OR],
+            [PI,LB,DG,RE],
+            [LG,LB,BL,BL],
+            [OR,PI,BR,DG],
+            [OR,YE,LG,GY],
+            [BL,DG,BR,RE],
+            [],
+            [],
+        ]
+        self.pvb = obj.PlotableVialBoard(example)
+    
+    def test_init(self):
+        self.assertIsInstance(self.pvb, obj.PlotableVialBoard)
+
+        print(self.pvb)
 
 if __name__ == '__main__':
     unittest.main()

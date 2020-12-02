@@ -1,5 +1,6 @@
 import unittest
-import puzzle_solver as ps
+import water_sort_puzzle.puzzle_solver as ps
+from water_sort_puzzle.puzzle_solver import *
 
 
 class TestSolver(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestSolver(unittest.TestCase):
         )
         board.move(0, 2)
 
-        new_board = ps.clone_vial_board(board)
+        new_board = board.clone()
         self.assertEqual(board, new_board)
         self.assertEqual(board.path, new_board.path)
 
@@ -32,9 +33,9 @@ class TestSolver(unittest.TestCase):
         )
         board.move(0, 2)
 
-        new_board = ps.clone_vial_board(board)
+        new_board = board.clone()
         self.assertEqual(1, new_board.gen)
-        new_board = ps.clone_vial_board(new_board)
+        new_board = new_board.clone()
         self.assertEqual(2, new_board.gen)
 
     def test_solve(self):
@@ -53,6 +54,7 @@ class TestSolver(unittest.TestCase):
             ]
         )
         board_1_solved = ps.solve(board_1)
+        self.assertIsInstance(board_1_solved, ps.VialBoard)
         for i in board_1_solved:
             self.assertIn(i, board_1_target)
 
@@ -267,6 +269,29 @@ class TestSolver(unittest.TestCase):
         self.assertTrue(ps.move_cleans_upper_el(board[0], board[1]))
         self.assertFalse(ps.move_cleans_upper_el(board[0], board[2]))
 
+    def test_adapt_to_plotable_vial_board(self):
+        example = [
+            [YE,OR,GY,LG],
+            [LB,GR,PU,RE],
+            [PU,LG,PI,GR],
+            [BR,RE,PI,YE],
+            [PU,BR,BL,GR],
+            [YE,PU,GY,GR],
+            [DG,LB,GY,OR],
+            [PI,LB,DG,RE],
+            [LG,LB,BL,BL],
+            [OR,PI,BR,DG],
+            [OR,YE,LG,GY],
+            [BL,DG,BR,RE],
+            [],
+            [],
+            [],
+        ]
+        pvb = ps.PlotableVialBoard(example)
+        print(pvb)
+        npvb = ps.solve(pvb)
+        self.assertIsInstance(npvb, ps.PlotableVialBoard)
+        print(npvb)
 
 if __name__ == '__main__':
     unittest.main()

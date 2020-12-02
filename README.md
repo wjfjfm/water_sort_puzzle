@@ -10,5 +10,9 @@ To get this game: [App Store](https://apps.apple.com/app/id1514542157) | [Google
 
 Click **[HERE]()** to get into an online environment for free.
 
+Use **Shift + Enter** to execute this block to get the Solver's result
+
+![image-20201203041335028](README.assets/image-20201203041335028.png)
+
 
 ## How to use

@@ -1,8 +1,45 @@
 import copy
 from functools import wraps
 from collections import UserList
-from water_sort_puzzle.exceptions import VialCannotAcceptThisException, VialIsFullException
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from water_sort_puzzle.exceptions import VialCannotAcceptThisException,\
+                                         VialIsFullException, \
+                                         NoEnoughtColorException
 
+
+# defination of colors
+LG = LIGHTGREEN = 'LIGHTGREEN'
+GY = GRAY = 'GRAY'
+OR = ORANGE = 'ORANGE'
+YE = YELLOW = 'YELLOW'
+RE = RED = 'RED'
+PU = PURPLE = 'PURPLE'
+GR = GREEN = 'GREEN'
+PI = PINK = 'PINK'
+BR = BROWN = 'BROWN'
+DG = DARKGREEN = 'DARKGREEN'
+BL = BLUE = 'BLUE'
+LB = LIGHTBLUE = 'SKYBLUE'
+BK = BLACK = 'BLACK'
+
+colors = {
+    'LIGHTGREEN': '#79DF83',
+    'GRAY': '#55585E',
+    'ORANGE' : '#E88A45',
+    'YELLOW' : '#FDEA68',
+    'RED': '#B22923',
+    'PURPLE': '#571F86',
+    'GREEN': '#74931F',
+    'PINK': '#DF5D73',
+    'BROWN': '#6A3D11',
+    'DARKGREEN': '#20562B',
+    'BLUE': '#2920BC',
+    'LIGHTBLUE': '#5D9EEA',
+    'BLACK': '#03071e',
+    '#a100f2': '#a100f2',
+    '#6a00f4': '#6a00f4',
+}
 
 def validate_path(path):
     if path is not None:
@@ -153,6 +190,7 @@ class VialBoard(UserList):
 
         super().__init__(vial_list)
         self.init_data = copy.deepcopy(self.data)
+        self.gen = 0
 
     def __str__(self):
         result = ''
@@ -227,6 +265,19 @@ class VialBoard(UserList):
             item = self[step[1]].pop()
             self[step[0]].append(item)
 
+    def clone(self):
+        board_data = copy.deepcopy(self.data)
+        board_path = copy.deepcopy(self.path)
+        board_init_data = copy.deepcopy(self.init_data)
+
+        new_board = VialBoard(board_data)
+        new_board.path = board_path
+        new_board.init_data = board_init_data
+
+        new_board.gen = self.gen + 1
+
+        return new_board
+
 
 def check_board_arguments_meet_requirements(vial_list):
     assert len(vial_list) > 1, 'VialBoard should contain at least 2 Vials!'
@@ -237,53 +288,104 @@ def check_board_arguments_meet_requirements(vial_list):
 
 
 class PlotableVialBoard(VialBoard):
-    # defination of colors
-    LG = LIGHTGREEN = 'LIGHTGREEN'
-    GY = GRAY = 'GRAY'
-    OR = ORANGE = 'ORANGE'
-    YE = YELLOW = 'YELLOW'
-    RE = RED = 'RED'
-    PU = PURPLE = 'PURPLE'
-    GR = GREEN = 'GREEN'
-    PI = PINK = 'PINK'
-    BR = BROWN = 'BROWN'
-    DG = DARKGREEN = 'DARKGREEN'
-    BL = BLUE = 'BLUE'
-    LB = LIGHTBLUE = 'SKYBLUE'
-
-    colors = {
-        'LIGHTGREEN': '#79DF83',
-        'GRAY': '#55585E',
-        'ORANGE' : '#E88A45',
-        'YELLOW' : '#FDEA68',
-        'RED': '#B22923',
-        'PURPLE': '#571F86',
-        'GREEN': '#74931F',
-        'PINK': '#DF5D73',
-        'BROWN': '#6A3D11',
-        'DARKGREEN': '#20562B',
-        'BLUE': '#2920BC',
-        'LIGHTBLUE': '#5D9EEA',
-    }
+   
     
-    def _get_color(self, dict_n2c, n):
-        if n in dict_n2c.keys():
-            return dict_n2c[n]
+    def _get_color(self, n):
+        if n in self.dict_n2c.keys():
+            return self.dict_n2c[n]
         else:
             for i in self.colors.keys():
-                if i not in dict_n2c.values():
-                    dict_n2c[n] = i
+                if i not in self.dict_n2c.values():
+                    self.dict_n2c[n] = i
+                    self.dict_c2n[i] = n
                     return i
-            raise 
+            raise NoEnoughtColorException()
 
-    def _get_num(dict_c2n, c):
-        pass
+    def _get_num(self, c):
+        if isinstance(c, int):
+            return c
+        if c in self.dict_c2n.keys():
+            return self.dict_c2n[c]
+        else:
+            n = len(self.dict_c2n.keys())
+            self.dict_c2n[c] = n
+            self.dict_n2c[n] = c
+
+            return n
+
     def __init__(self, vial_list_color):
-        dict_n2c = {}
-        dict_c2n = {}
+        self.dict_n2c = {}
+        self.dict_c2n = {}
+        self.colors = colors
 
         via_list_num = []
-        for l in vial_list:
+        for l in vial_list_color:
             temp_list = []
             for c in l:
-                
+                temp_list.append(self._get_num(c))
+            via_list_num.append(temp_list)
+
+        super().__init__(via_list_num)
+
+    def clone(self):
+        board_dict_n2c = copy.deepcopy(self.dict_n2c)
+        board_dict_c2n = copy.deepcopy(self.dict_c2n)
+        board_colors = copy.deepcopy(self.colors)
+        
+        new_board = super().clone()
+        new_board.__class__ = PlotableVialBoard
+
+
+        new_board.dict_n2c = board_dict_n2c
+        new_board.dict_c2n = board_dict_c2n
+        new_board.colors = board_colors
+
+        return new_board
+    
+    def show(self, scale=0.5):
+        
+        via_list_c = []
+        for l in self:
+            temp_list = []
+            for n in l:
+                temp_list.append(self._get_color(n))
+            via_list_c.append(temp_list)
+
+        bottles = via_list_c
+        # calc the arrangement of bottles
+        if len(bottles) > 5:
+            row = 2
+            column = int((len(bottles) + 1) / 2)
+        else:
+            row = 1
+            column = len(bottles)
+        
+        # calc the height of bottles
+        height_bottle = 4
+        
+        # generate bottles
+        fig, axs = plt.subplots(row, column, figsize=(column * scale, row * height_bottle * scale))
+        
+        # draw water in each bottle
+        for n, axn in enumerate(axs.flat):
+            axn.tick_params(labelcolor='none', top=False, bottom=False, left=False, right=False)
+            
+            # delete this bottle if it not exist
+            if n >= len(bottles):   
+                axn.spines['top'].set_color('none')
+                axn.spines['bottom'].set_color('none')
+                axn.spines['left'].set_color('none')
+                axn.spines['right'].set_color('none')
+                continue
+            
+            # draw water
+            for height, water in enumerate(bottles[n]):
+                axn.add_patch(
+                    patches.Rectangle(
+                        (0, height / (height_bottle+0.5)),  # (x,y) of rec
+                        1,                            # width of 
+                        1 / (height_bottle+0.5),            # height of rec
+                        color = water
+                    )
+                )
+        plt.show()
