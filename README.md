@@ -6,6 +6,25 @@ A visible solver to water sort puzzle base on python.
 
 To get this game: [App Store](https://apps.apple.com/app/id1514542157) | [Google Play](https://play.google.com/store/apps/details?id=com.gma.water.sort.puzzle)
 
+Game:
+
+![level107](README.assets/level107.jpeg)
+
+Solver:
+
+![solver1](README.assets/solver1.png)
+
+...
+
+...
+
+
+Finally:
+
+![solver2](README.assets/solver2.png)
+
+
+
 ## Quick Start
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/wjfjfm/water_sort_puzzle/HEAD?filepath=water-sort-puzzle-solver.ipynb)
