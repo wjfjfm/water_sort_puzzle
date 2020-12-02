@@ -42,7 +42,7 @@ Finally you can get the results!
 
 We define the state of current by these Label of colors:
 
-![colors](README.assets/colors.png)
+![colors-1](README.assets/colors-1.png)
 
 Then you can define a status like this:
 
@@ -52,7 +52,7 @@ bottle_state = [
     [PU,YE,PU,YE],
     [PI,PU,YE,PI],
     [],
-    [], 
+    [],
 ]
 ```
 
