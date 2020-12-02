@@ -14,12 +14,7 @@ Solver:
 
 ![solver1](README.assets/solver1.png)
 
-...
-
-...
-
-
-Finally:
+... ...
 
 ![solver2](README.assets/solver2.png)
 
