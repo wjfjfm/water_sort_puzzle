@@ -10,3 +10,6 @@ class VialIsFullException(Exception):
 
 class CannotSolveThisException(Exception):
     pass
+
+class NoEnoughtColorException(Exception):
+    pass

@@ -1,7 +1,7 @@
 import copy
 from functools import wraps
 from collections import UserList
-from exceptions import VialCannotAcceptThisException, VialIsFullException
+from water_sort_puzzle.exceptions import VialCannotAcceptThisException, VialIsFullException
 
 
 def validate_path(path):
@@ -234,3 +234,56 @@ def check_board_arguments_meet_requirements(vial_list):
     for i in vial_list:
         assert isinstance(i, Vial), 'VialBoard elements all must be instances of Vial class!'
         assert first_vial.max_size == i.max_size
+
+
+class PlotableVialBoard(VialBoard):
+    # defination of colors
+    LG = LIGHTGREEN = 'LIGHTGREEN'
+    GY = GRAY = 'GRAY'
+    OR = ORANGE = 'ORANGE'
+    YE = YELLOW = 'YELLOW'
+    RE = RED = 'RED'
+    PU = PURPLE = 'PURPLE'
+    GR = GREEN = 'GREEN'
+    PI = PINK = 'PINK'
+    BR = BROWN = 'BROWN'
+    DG = DARKGREEN = 'DARKGREEN'
+    BL = BLUE = 'BLUE'
+    LB = LIGHTBLUE = 'SKYBLUE'
+
+    colors = {
+        'LIGHTGREEN': '#79DF83',
+        'GRAY': '#55585E',
+        'ORANGE' : '#E88A45',
+        'YELLOW' : '#FDEA68',
+        'RED': '#B22923',
+        'PURPLE': '#571F86',
+        'GREEN': '#74931F',
+        'PINK': '#DF5D73',
+        'BROWN': '#6A3D11',
+        'DARKGREEN': '#20562B',
+        'BLUE': '#2920BC',
+        'LIGHTBLUE': '#5D9EEA',
+    }
+    
+    def _get_color(self, dict_n2c, n):
+        if n in dict_n2c.keys():
+            return dict_n2c[n]
+        else:
+            for i in self.colors.keys():
+                if i not in dict_n2c.values():
+                    dict_n2c[n] = i
+                    return i
+            raise 
+
+    def _get_num(dict_c2n, c):
+        pass
+    def __init__(self, vial_list_color):
+        dict_n2c = {}
+        dict_c2n = {}
+
+        via_list_num = []
+        for l in vial_list:
+            temp_list = []
+            for c in l:
+                
