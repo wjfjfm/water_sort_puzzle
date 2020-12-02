@@ -14,7 +14,7 @@ Click **[HERE](https://mybinder.org/v2/gh/wjfjfm/water_sort_puzzle/HEAD?filepath
 
 Use **Shift + Enter** to execute this block to get the Solver's result
 
-![execute](README.assets/exeute.png)
+![execute](README.assets/execute.png)
 
 Finally you can get the results!
 
