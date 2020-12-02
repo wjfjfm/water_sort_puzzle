@@ -26,9 +26,11 @@ Solver:
 
 Click **[HERE](https://mybinder.org/v2/gh/wjfjfm/water_sort_puzzle/HEAD?filepath=water-sort-puzzle-solver.ipynb)** and wait for 1 minute to get into an online environment for free!
 
-After get into this ↑ environment
+After get into this ↑ environment, you need to **Shift + Enter** to execute this block first to install matplotlib
 
-Use **Shift + Enter** to execute this block to get the Solver's result
+![install](README.assets/install.png)
+
+Then use **Shift + Enter** to execute this block to get the Solver's result
 
 ![execute](README.assets/execute.png)
 
@@ -66,7 +68,7 @@ Or if you can ignore this if you don't understand it
 
 ```python
 def solve_puzzle(bottle_state):
-    
+
     pvb = PlotableVialBoard(bottle_state)  # Initialize
     solved_pvb = solve(pvb)  # Solve puzzle
     paths = solved_pvb.path  # Save Solution
@@ -103,5 +105,3 @@ Use jupyter notebook to to open this page
 ```bash
 cd water_sort_puzzle && jupyter notebook water-sort-puzzle-solver.ipynb
 ```
-
-
